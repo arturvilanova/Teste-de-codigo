@@ -122,7 +122,7 @@
         .whatsapp-status { background-color: #128C7E; }
         .whatsapp-status:hover { background-color: #075e54; }
 
-        /* Tamanho dos ícones SVG */
+        /* Ícones SVG do Whatsapp */
         .btn-share svg {
             width: 20px;
             height: 20px;
@@ -169,19 +169,18 @@
 
         const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
 
-        // 2. FUNÇÃO INTELIGENTE QUE ABRE O WHATSAPP SEM TELA BRANCA
+        // 2. FUNÇÃO ESTÁVEL QUE ABRE O WHATSAPP COM LINK LONGO
         function abrirWhatsapp() {
-            const linkApp = "whatsapp://send?text=" + mensagemCodificada;
-            
-            // Corrigido para abrir a rota de envio correta no computador
-            const linkWeb = "https://whatsapp.com" + mensagemCodificada;
+            const linkApi = "https://whatsapp.com" + mensagemCodificada;
 
             const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
             if (isMobile) {
-                window.location.href = linkApp;
+                // Abre o aplicativo oficial sem bugar o link no celular
+                window.location.href = linkApi;
             } else {
-                window.open(linkWeb, '_blank');
+                // Abre na aba do computador
+                window.open(linkApi, '_blank');
             }
         }
 
