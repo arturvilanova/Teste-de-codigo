@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lindos Horizontes</title>
     
+    <!-- Link para carregar os ícones do Font Awesome -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
     <style>
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
@@ -13,7 +16,6 @@
             background-color: #f0f2f5;
         }
 
-        /* 1. FUNDO ESCURO */
         #modalOverlay {
             position: fixed;
             top: 0;
@@ -35,7 +37,6 @@
             visibility: visible;
         }
 
-        /* 2. CARD FLUTUANTE */
         .card-flutuante {
             background: #ffffff;
             padding: 35px 25px;
@@ -53,7 +54,6 @@
             transform: scale(1);
         }
 
-        /* BOTÃO FECHAR */
         .botao-fechar {
             position: absolute;
             top: 15px;
@@ -66,7 +66,6 @@
             line-height: 1;
         }
 
-        /* TEXTOS */
         .emoji-topo {
             font-size: 45px;
             margin-bottom: 10px;
@@ -86,7 +85,6 @@
             margin-bottom: 25px;
         }
 
-        /* OPÇÕES DE COMPARTILHAMENTO */
         .opcoes-share {
             display: flex;
             flex-direction: column;
@@ -115,110 +113,67 @@
             transform: scale(0.98);
         }
 
-        /* Cores das Redes */
         .whatsapp { background-color: #25D366; }
         .whatsapp:hover { background-color: #1ebd5c; }
         
         .whatsapp-status { background-color: #128C7E; }
         .whatsapp-status:hover { background-color: #075e54; }
-
-        .copiar { background-color: #555555; }
-        .copiar:hover { background-color: #333333; }
-
-        /* Alerta de Link Copiado */
-        #copiadoAlerta {
-            display: none;
-            color: #128C7E;
-            font-weight: bold;
-            font-size: 13px;
-            margin-top: 5px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Conteúdo do seu site -->
     <div style="padding: 40px; text-align: center; color: #333;">
         <h1>Seu Site Incrível</h1>
         <p>As pessoas verão este conteúdo ao fundo assim que fecharem o card.</p>
     </div>
 
-    <!-- ESTRUTURA DO CARD -->
     <div id="modalOverlay">
         <div class="card-flutuante">
-            <button class="botao-fechar" onclick="fecharCard()">&times;</button>
+            <button class="botao-fechar" onclick="fecharCard()" aria-label="Fechar">&times;</button>
             <span class="emoji-topo">🚀</span>
             <h2>Me dá essa força?</h2>
             <p>Fico muito feliz por você estar aqui! Este é o meu novo projeto. Se puder me ajudar a divulgar, escolha uma opção abaixo:</p>
             
             <div class="opcoes-share">
-                <!-- Enviar direto para um amigo no WhatsApp -->
+                <!-- Botão 1 com ícone do WhatsApp -->
                 <button id="linkZap" class="btn-share whatsapp">
-                    📲 Enviar para um amigo
+                    <i class="fab fa-whatsapp"></i> Enviar para um amigo
                 </button>
 
-                <!-- Ir direto para a aba de Status -->
+                <!-- Botão 2 com ícone do WhatsApp -->
                 <button id="linkStatus" class="btn-share whatsapp-status">
-                    🤳 Postar no meu Status
+                    <i class="fab fa-whatsapp"></i> Postar no meu Status
                 </button>
-
-                <!-- Copiar o texto com o link para colar em qualquer lugar -->
-                <button id="btnCopiar" class="btn-share copiar">
-                    🔗 Copiar link com mensagem
-                </button>
-                <div id="copiadoAlerta">Texto e link copiados com sucesso!</div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT CORRIGIDO -->
     <script>
-        // 1. ADICIONE O LINK EXATO DO SEU SITE AQUI (Ex: https://github.io)
-        const URL_DO_SEU_SITE = "https://github.io"; 
+        const TEXTO_MENSAGEM = "Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o site do Lindos Horizontes que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 https://github.io";
+        const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
 
-        // 2. MONTAGEM DA MENSAGEM
-        const TEXTO_MENSAGEM = `Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o site do Lindos Horizontes que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 ${URL_DO_SEU_SITE}`;
-
-        // 3. FUNÇÃO PARA ABRIR O WHATSAPP SEM ERROS
         function abrirWhatsapp() {
-            const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
-            
-            // Usar ://whatsapp.com evita o bug de "página não encontrada" do wa.me sem número
-            const urlFinal = `https://://whatsapp.com/send?text=${mensagemCodificada}`;
-            
-            // Abre em uma nova aba no PC ou no app direto no celular
-            window.open(urlFinal, '_blank');
+            const linkApi = "https://whatsapp.com" + mensagemCodificada;
+            window.open(linkApi, '_blank');
         }
 
-        // Vincula a função aos cliques dos botões de WhatsApp
-        document.getElementById('linkZap').onclick = abrirWhatsapp;
-        document.getElementById('linkStatus').onclick = abrirWhatsapp;
+        document.getElementById('linkZap').onclick = function() {
+            abrirWhatsapp();
+        };
 
-        // Abre o card automaticamente 1.5 segundos após carregar a página
+        document.getElementById('linkStatus').onclick = function() {
+            abrirWhatsapp();
+        };
+
         window.onload = function() {
             setTimeout(function() {
                 document.getElementById('modalOverlay').classList.add('ativo');
             }, 1500); 
         };
 
-        // Fecha o card
         function fecharCard() {
             document.getElementById('modalOverlay').classList.remove('ativo');
         }
-
-        // Copia a mensagem inteira para colar em qualquer outra rede
-        document.getElementById('btnCopiar').onclick = function() {
-            navigator.clipboard.writeText(TEXTO_MENSAGEM).then(() => {
-                const alerta = document.getElementById('copiadoAlerta');
-                alerta.style.display = 'block';
-                setTimeout(() => {
-                    alerta.style.display = 'none';
-                    fecharCard();
-                }, 1500);
-            }).catch(err => {
-                alert("Não foi possível copiar. Selecione e copie manualmente.");
-            });
-        };
     </script>
 
 </body>
