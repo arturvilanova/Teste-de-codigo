@@ -108,6 +108,7 @@
             gap: 10px;
             transition: opacity 0.2s, transform 0.2s;
             text-decoration: none;
+            box-sizing: border-box;
         }
 
         .btn-share:active {
@@ -136,7 +137,7 @@
 </head>
 <body>
 
-    <!-- Conteúdo fake do seu site -->
+    <!-- Conteúdo do seu site -->
     <div style="padding: 40px; text-align: center; color: #333;">
         <h1>Seu Site Incrível</h1>
         <p>As pessoas verão este conteúdo ao fundo assim que fecharem o card.</p>
@@ -152,14 +153,14 @@
             
             <div class="opcoes-share">
                 <!-- Enviar direto para um amigo no WhatsApp -->
-                <a id="linkZap" href="#" class="btn-share whatsapp">
+                <button id="linkZap" class="btn-share whatsapp">
                     📲 Enviar para um amigo
-                </a>
+                </button>
 
-                <!-- Ir direto para a aba de Status (Funciona no celular) -->
-                <a id="linkStatus" href="#" class="btn-share whatsapp-status">
+                <!-- Ir direto para a aba de Status -->
+                <button id="linkStatus" class="btn-share whatsapp-status">
                     🤳 Postar no meu Status
-                </a>
+                </button>
 
                 <!-- Copiar o texto com o link para colar em qualquer lugar -->
                 <button onclick="copiarTexto()" class="btn-share copiar">
@@ -170,29 +171,54 @@
         </div>
     </div>
 
+    <!-- SCRIPT CORRIGIDO -->
     <script>
-        // CONFIGURAÇÕES DA MENSAGEM OCULTA
+        // CONFIGURAÇÕES DA SUA MENSAGEM OCULTA
+        // Lembre-se de trocar o link abaixo pelo link oficial do seu GitHub Pages!
         const TEXTO_MENSAGEM = "Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o novo site que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 https://meusite.com.br";
 
-        // Preenche os links do WhatsApp dinamicamente
         const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
-        
-        // No celular, esse link do WhatsApp abre a lista de contatos para você escolher quem ou onde postar (inclui Status)
-        document.getElementById('linkZap').href = "https://wa.me" + mensagemCodificada;
-        document.getElementById('linkStatus').href = "https://wa.me" + mensagemCodificada;
 
-        // Mostra o card 1.5 segundos após abrir
+        // FUNÇÃO INTELIGENTE QUE ABRE O WHATSAPP SEM TELA BRANCA
+        function abrirWhatsapp() {
+            // Protocolo direto para abrir o aplicativo no celular
+            const linkApp = "whatsapp://send?text=" + mensagemCodificada;
+            
+            // Link de contingência para computadores
+            const linkWeb = "https://whatsapp.com" + mensagemCodificada;
+
+            // Identifica se o acesso está sendo feito por um celular
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                window.location.href = linkApp;
+            } else {
+                window.open(linkWeb, '_blank');
+            }
+        }
+
+        // Vincula a função de abrir o WhatsApp aos cliques dos botões
+        document.getElementById('linkZap').onclick = function() {
+            abrirWhatsapp();
+        };
+
+        document.getElementById('linkStatus').onclick = function() {
+            abrirWhatsapp();
+        };
+
+        // Abre o card automaticamente 1.5 segundos após carregar a página
         window.onload = function() {
             setTimeout(function() {
                 document.getElementById('modalOverlay').classList.add('ativo');
             }, 1500); 
         };
 
+        // Fecha o card
         function fecharCard() {
             document.getElementById('modalOverlay').classList.remove('ativo');
         }
 
-        // Função de fallback para copiar o link e a mensagem para a área de transferência
+        // Copia a mensagem inteira para colar em qualquer outra rede
         function copiarTexto() {
             navigator.clipboard.writeText(TEXTO_MENSAGEM).then(() => {
                 const alerta = document.getElementById('copiadoAlerta');
@@ -209,4 +235,3 @@
 
 </body>
 </html>
-
