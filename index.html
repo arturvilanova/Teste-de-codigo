@@ -163,7 +163,7 @@
                 </button>
 
                 <!-- Copiar o texto com o link para colar em qualquer lugar -->
-                <button onclick="copiarTexto()" class="btn-share copiar">
+                <button id="btnCopiar" class="btn-share copiar">
                     🔗 Copiar link com mensagem
                 </button>
                 <div id="copiadoAlerta">Texto e link copiados com sucesso!</div>
@@ -173,33 +173,26 @@
 
     <!-- SCRIPT CORRIGIDO -->
     <script>
-        // CONFIGURAÇÕES DA SUA MENSAGEM OCULTA
-        const TEXTO_MENSAGEM = "Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o site do Lindos Horizontes que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 https://github.io";
+        // 1. ADICIONE O LINK EXATO DO SEU SITE AQUI (Ex: https://github.io)
+        const URL_DO_SEU_SITE = "https://github.io"; 
 
-        const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
+        // 2. MONTAGEM DA MENSAGEM
+        const TEXTO_MENSAGEM = `Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o site do Lindos Horizontes que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 ${URL_DO_SEU_SITE}`;
 
-        // FUNÇÃO INTELIGENTE QUE ABRE O WHATSAPP SEM TELA BRANCA
+        // 3. FUNÇÃO PARA ABRIR O WHATSAPP SEM ERROS
         function abrirWhatsapp() {
-            const linkApp = "whatsapp://send?text=" + mensagemCodificada;
-            const linkWeb = "https://whatsapp.com" + mensagemCodificada;
-
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                window.location.href = linkApp;
-            } else {
-                window.open(linkWeb, '_blank');
-            }
+            const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
+            
+            // Usar ://whatsapp.com evita o bug de "página não encontrada" do wa.me sem número
+            const urlFinal = `https://://whatsapp.com/send?text=${mensagemCodificada}`;
+            
+            // Abre em uma nova aba no PC ou no app direto no celular
+            window.open(urlFinal, '_blank');
         }
 
-        // Vincula a função de abrir o WhatsApp aos cliques dos botões
-        document.getElementById('linkZap').onclick = function() {
-            abrirWhatsapp();
-        };
-
-        document.getElementById('linkStatus').onclick = function() {
-            abrirWhatsapp();
-        };
+        // Vincula a função aos cliques dos botões de WhatsApp
+        document.getElementById('linkZap').onclick = abrirWhatsapp;
+        document.getElementById('linkStatus').onclick = abrirWhatsapp;
 
         // Abre o card automaticamente 1.5 segundos após carregar a página
         window.onload = function() {
@@ -214,7 +207,7 @@
         }
 
         // Copia a mensagem inteira para colar em qualquer outra rede
-        function copiarTexto() {
+        document.getElementById('btnCopiar').onclick = function() {
             navigator.clipboard.writeText(TEXTO_MENSAGEM).then(() => {
                 const alerta = document.getElementById('copiadoAlerta');
                 alerta.style.display = 'block';
@@ -225,7 +218,7 @@
             }).catch(err => {
                 alert("Não foi possível copiar. Selecione e copie manualmente.");
             });
-        }
+        };
     </script>
 
 </body>
