@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Novo Projeto</title>
+    <title>Lindos Horizontes</title>
     
     <style>
         body {
@@ -174,20 +174,15 @@
     <!-- SCRIPT CORRIGIDO -->
     <script>
         // CONFIGURAÇÕES DA SUA MENSAGEM OCULTA
-        // Lembre-se de trocar o link abaixo pelo link oficial do seu GitHub Pages!
-        const TEXTO_MENSAGEM = "Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o novo site que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 https://meusite.com.br";
+        const TEXTO_MENSAGEM = "Olha esse projeto incrível! 🚀\n\nAchei muito maneiro o site do Lindos Horizontes que estão fazendo e resolvi apoiar! Dá uma olhada você também:\n\n👉 https://github.io";
 
         const mensagemCodificada = encodeURIComponent(TEXTO_MENSAGEM);
 
         // FUNÇÃO INTELIGENTE QUE ABRE O WHATSAPP SEM TELA BRANCA
         function abrirWhatsapp() {
-            // Protocolo direto para abrir o aplicativo no celular
             const linkApp = "whatsapp://send?text=" + mensagemCodificada;
-            
-            // Link de contingência para computadores
             const linkWeb = "https://whatsapp.com" + mensagemCodificada;
 
-            // Identifica se o acesso está sendo feito por um celular
             const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
             if (isMobile) {
